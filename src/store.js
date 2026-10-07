@@ -2,6 +2,7 @@
 export class Store {
   constructor() {
     this.records = new Map();
+    this.meta = new Map();
   }
 
   add(record) {
@@ -11,8 +12,26 @@ export class Store {
     this.records.set(record.recordId, structuredClone(record));
   }
 
+  /** 以键覆盖写入记录。 */
+  put(key, value) {
+    this.records.set(key, structuredClone(value));
+  }
+
   get(recordId) {
     const value = this.records.get(recordId);
     return value ? structuredClone(value) : null;
+  }
+
+  /** 返回全部 [键, 记录] 条目。 */
+  all() {
+    return [...this.records.entries()].map(([key, value]) => [key, structuredClone(value)]);
+  }
+
+  getMeta(key) {
+    return this.meta.get(key);
+  }
+
+  setMeta(key, value) {
+    this.meta.set(key, value);
   }
 }
