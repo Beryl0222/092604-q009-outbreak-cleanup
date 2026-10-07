@@ -3,4 +3,9 @@ import { handle } from "./api.js";
 
 let raw = "";
 for await (const chunk of process.stdin) raw += chunk;
-console.log(handle(raw.trim() || '{"action":"health"}'));
+try {
+  console.log(handle(raw.trim() || '{"action":"health"}'));
+} catch (error) {
+  console.error(JSON.stringify({ error: String(error?.message ?? error) }));
+  process.exitCode = 1;
+}
